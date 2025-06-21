@@ -1,0 +1,11 @@
+build:
+  version: "1.0"
+
+cards:
+  message: "Welcome to EazyBank cards related prod APIs"
+  contactDetails:
+    name: "Carter Aishwarya - Product Owner"
+    email: "carter@eazybank.com"
+  onCallSupport:
+    - (453) 392-5829
+    - (236) 203-1384

@@ -1,0 +1,106 @@
+services:
+
+  configserver:
+    image: "jjasonek/configserver:s10"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s  # Wait for 10 seconds before checking the health of the container
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+
+  eurekaserver:
+    image: "jjasonek/eurekaserver:s10"
+    container_name: eurekaserver-ms
+    ports:
+      - "8070:8070"
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"   # This is here because of bug in Spring Cloud Config Server version.
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s  # Wait for 10 seconds before checking the health of the container
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+
+  accounts:
+    image: "jjasonek/accounts:s10"
+    container_name: accounts-ms
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"   # This is here because of bug in Spring Cloud Config Server version.
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s  # Wait for 10 seconds before checking the health of the container
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  loans:
+    image: "jjasonek/loans:s10"
+    container_name: loans-ms
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_APPLICATION_NAME: "loans"   # This is here because of bug in Spring Cloud Config Server version.
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s  # Wait for 10 seconds before checking the health of the container
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  cards:
+    image: "jjasonek/cards:s10"
+    container_name: cards-ms
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_APPLICATION_NAME: "cards"   # This is here because of bug in Spring Cloud Config Server version.
+    healthcheck:
+      test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s  # Wait for 10 seconds before checking the health of the container
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  gatewayserver:
+    image: "jjasonek/gatewayserver:s10"
+    container_name: gatewayserver-ms
+    ports:
+      - "8072:8072"
+    depends_on:
+      accounts:
+        condition: service_healthy
+      loans:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"   # This is here because of bug in Spring Cloud Config Server version.
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+networks:
+  eazybank:
+    driver: "bridge"

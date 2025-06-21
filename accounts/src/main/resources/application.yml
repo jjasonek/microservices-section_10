@@ -1,0 +1,69 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: accounts
+  profiles:
+    active: "prod"  # Default setting. This can also be set by the Configserver.
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true   # to see in browser http://localhost:8080/h2-console
+  jpa:
+    hibernate:
+      database-platform: org.hibernate.dialect.H2Dialect
+      ddl-auto: update
+    show-sql: true
+  config:
+    import: "optional:configserver:http://localhost:8071"
+
+management:   # to see in browser http://localhost:8080/actuator
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true  # Enabled is deprecated. It is replaced by restricted.
+    health:
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: true
+
+# this allows the app to be shutdown remotely by hitting http://localhost:8080/actuator/shutdown
+# This setting is no more needed.
+endpoints:
+  shutdown:
+    enabled: true
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:   # info for Eureka Dashboard, which is exposed as actuator endpoint, which we are allowing by management.info.env.enabled
+  app:
+    name: "accounts"
+    description: "Eazy Bank Accounts Application"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      eazybytes:
+        accounts: DEBUG

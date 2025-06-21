@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: gatewayserver
+  config:
+    import: "optional:configserver:http://localhost:8071"
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false   # replace for spring.cloud.gateway.discovery.locator.enabled
+              lowerCaseServiceId: true
+#      discovery:
+#        locator:
+#          enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: unrestricted
+#      enabled: true
+
+  info:
+    env:
+      enabled: true
+
+info:   # info for Eureka Dashboard, which is exposed as actuator endpoint, which we are allowing by management.info.env.enabled
+  app:
+    name: "gatewayserver"
+    description: "Eazy Bank Gateway Server Application"
+    version: "1.0.0"
+
+logging:
+  level:
+    com:
+      eazybytes:
+        gatewayserver: DEBUG

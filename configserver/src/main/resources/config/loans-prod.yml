@@ -1,0 +1,11 @@
+build:
+  version: "1.0"
+
+loans:
+  message: "Welcome to EazyBank loans related prod APIs"
+  contactDetails:
+    name: "Loaner Aishwarya - Product Owner"
+    email: "loaner@eazybank.com"
+  onCallSupport:
+    - (553) 392-5829
+    - (336) 203-1384

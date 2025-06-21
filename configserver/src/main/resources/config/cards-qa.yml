@@ -1,0 +1,11 @@
+build:
+  version: "2.0"
+
+cards:
+  message: "Welcome to EazyBank cards related to QA APIs"
+  contactDetails:
+    name: "Carter Ray - QA leas=d"
+    email: "carter@eazybank.com"
+  onCallSupport:
+    - (666) 265-4765
+    - (666) 734-9371
