@@ -15,6 +15,9 @@ http://localhost:9000/swagger-ui/index.html.
 
 ## links
 
+### Eureka Server dashboard
+http://localhost:8070/
+
 ### Link from Eureka Server to Gateway Server
 http://172.24.64.1:8072/actuator/info
 {
