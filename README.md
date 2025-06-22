@@ -37,4 +37,29 @@ http://localhost:8072/actuator/gateway/routes
 POST http://localhost:8072/eazybank/accounts/api/create
 
 
+### Resilience4j links:
+http://localhost:8072/actuator:
+...
+"circuitbreakers-name": {
+"href": "http://localhost:8072/actuator/circuitbreakers/{name}",
+"templated": true
+},
+"circuitbreakers": {
+"href": "http://localhost:8072/actuator/circuitbreakers",
+"templated": false
+},
+"circuitbreakerevents-name": {
+"href": "http://localhost:8072/actuator/circuitbreakerevents/{name}",
+"templated": true
+},
+"circuitbreakerevents": {
+"href": "http://localhost:8072/actuator/circuitbreakerevents",
+"templated": false
+},
+...
+
+http://localhost:8072/actuator/circuitbreakers
+http://localhost:8072/actuator/circuitbreakerevents?name=accountsCircuitBreaker
+
+
 
