@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
@@ -32,6 +34,14 @@ public class GatewayserverApplication {
                         .path("/eazybank/loans/**")
                         .filters(f -> f.rewritePath("/eazybank/loans/(?<segment>.*)", "/${segment}")
                                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                        .retry(retryConfig -> retryConfig.setRetries(3)
+                                                                         .setMethods(HttpMethod.GET)    // just for GET methods
+                                                .setBackoff(
+                                                        Duration.ofMillis(100),     // first backoff
+                                                        Duration.ofMillis(1000),    // max backoff
+                                                        2,      // multiplier (factor)
+                                                        true    // use previous backoff to count next one.
+                                                ))
                         )
                         .uri("lb://LOANS")
                 )
