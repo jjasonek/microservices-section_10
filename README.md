@@ -139,3 +139,12 @@ and in log:
 2025-06-24T22:26:38.114+02:00 DEBUG 25680 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
 2025-06-24T22:26:38.117+02:00 DEBUG 25680 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfoFallback() method invoked
 
+### After setting TimeoutException in retryExceptions and letting the getBuildInfo() method throw TimeoutException:
+GET http://localhost:8072/eazybank/accounts/api/build-info
+0.9 - static value
+
+and log:
+2025-06-24T22:45:25.438+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T22:45:25.953+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T22:45:26.973+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T22:45:26.976+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfoFallback() method invoked

@@ -89,3 +89,5 @@ resilience4j.retry:
       exponentialBackoffMultiplier: 2
       ignoreExceptions:
         - java.lang.NullPointerException  # do not retry on NullPointerException
+      retryExceptions:
+        - java.util.concurrent.TimeoutException    # retry only when TimeoutException is thrown. This makes ignoreExceptions not used.
