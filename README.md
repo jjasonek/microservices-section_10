@@ -119,3 +119,7 @@ Do clean your Postman cache.
 
 ### Note: 
 Here, the initial attempt is also count as retry, which is different from the retry pattern on Gateway Server. 
+
+### Now after increasing the waitDuration we get response from circuit breaker because it's default timeout is less 
+### than waitDuration: 500.
+An error occurred. Please try again after come time or contact support team!!!

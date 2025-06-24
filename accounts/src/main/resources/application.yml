@@ -84,6 +84,6 @@ resilience4j.retry:
   configs:
     default:  # can be for instance "getBuildInfo", like name parameter in @Retry
       maxAttempts: 3  # renamed from maxRetryAttempts
-      waitDuration: 100
+      waitDuration: 500
       enableExponentialBackoff: true
       exponentialBackoffMultiplier: 2
