@@ -125,7 +125,17 @@ Here, the initial attempt is also count as retry, which is different from the re
 ### is less than waitDuration: 500.
 An error occurred. Please try again after come time or contact support team!!!
 
+
 ### Now after we set default timeout for cuircuit breaker to 4s we get the response from retry fallback method:
 GET http://localhost:8072/eazybank/accounts/api/build-info
 0.9 - static value
+
+
+### After setting NullPointerException in ignoredExceptions:
+GET http://localhost:8072/eazybank/accounts/api/build-info
+0.9 - static value
+
+and in log:
+2025-06-24T22:26:38.114+02:00 DEBUG 25680 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T22:26:38.117+02:00 DEBUG 25680 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfoFallback() method invoked
 
