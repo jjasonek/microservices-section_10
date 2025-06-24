@@ -79,3 +79,11 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
+
+resilience4j.retry:
+  configs:
+    default:  # can be for instance "getBuildInfo", like name parameter in @Retry
+      maxAttempts: 3  # renamed from maxRetryAttempts
+      waitDuration: 100
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2

@@ -84,7 +84,7 @@ Do clean your Postman cache.
 }
 
 
-## Retry pattern
+## Retry pattern implemented on Gateway Server
 
 ### After setting FAKE error in LoansController we should see the retry pattern in the logs:
 2025-06-24T18:48:47.309+02:00  INFO 34800 --- [loans] [nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
@@ -104,3 +104,18 @@ Do clean your Postman cache.
 "errorMessage": "Loans contact-info API FAKE error",
 "errorTime": "2025-06-24T18:54:59.7779627"
 }
+
+
+## Retry pattern implemented on accounts service
+
+### Postman response on GET http://localhost:8072/eazybank/accounts/api/build-info
+0.9 - static value
+
+### accounts service logs:
+2025-06-24T21:18:22.601+02:00 DEBUG 4720 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T21:18:22.716+02:00 DEBUG 4720 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T21:18:22.934+02:00 DEBUG 4720 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
+2025-06-24T21:18:22.936+02:00 DEBUG 4720 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfoFallback() method invoked
+
+### Note: 
+Here, the initial attempt is also count as retry, which is different from the retry pattern on Gateway Server. 
