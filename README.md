@@ -82,3 +82,25 @@ Do clean your Postman cache.
     "message": "Response took longer than timeout: PT2S",
     "trace": "org.springframework.cloud.gateway.support.TimeoutException: Response took longer than timeout: PT2S\r\n\tSuppressed: The stacktrace has been enhanced by Reactor, refer to additional information below: \nAssembly trace from producer [reactor.core.publisher.MonoError] :\n\treactor.core.publisher.Mono.error(Mono.java:299)\n\torg.springframework.cloud.gateway.filter.NettyRoutingFilter.lambda$filter$6(NettyRoutingFilter.java:195)\r\nError has been observed at the following site(s):\r\n\t*____Mono.error ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.lambda$filter$6(NettyRoutingFilter.java:195)\r\n\t*____Mono.defer ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.filter(NettyRoutingFilter.java:194)\r\n\t*__Flux.timeout ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.filter(NettyRoutingFilter.java:193)\r\nOriginal Stack Trace:\r\n"
 }
+
+
+## Retry pattern
+
+### After setting FAKE error in LoansController we should see the retry pattern in the logs:
+2025-06-24T18:48:47.309+02:00  INFO 34800 --- [loans] [nio-8090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-06-24T18:48:47.314+02:00 DEBUG 34800 --- [loans] [nio-8090-exec-1] c.e.loans.controller.LoansController     : Invoked Loans contact-info API
+2025-06-24T18:48:47.324+02:00  WARN 34800 --- [loans] [nio-8090-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.RuntimeException: Loans contact-info API FAKE error]
+2025-06-24T18:48:47.444+02:00 DEBUG 34800 --- [loans] [nio-8090-exec-2] c.e.loans.controller.LoansController     : Invoked Loans contact-info API
+2025-06-24T18:48:47.446+02:00  WARN 34800 --- [loans] [nio-8090-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.RuntimeException: Loans contact-info API FAKE error]
+2025-06-24T18:48:47.656+02:00 DEBUG 34800 --- [loans] [nio-8090-exec-9] c.e.loans.controller.LoansController     : Invoked Loans contact-info API
+2025-06-24T18:48:47.657+02:00  WARN 34800 --- [loans] [nio-8090-exec-9] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.RuntimeException: Loans contact-info API FAKE error]
+2025-06-24T18:48:48.079+02:00 DEBUG 34800 --- [loans] [nio-8090-exec-3] c.e.loans.controller.LoansController     : Invoked Loans contact-info API
+2025-06-24T18:48:48.081+02:00  WARN 34800 --- [loans] [nio-8090-exec-3] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.RuntimeException: Loans contact-info API FAKE error]
+
+### And after 750ms we got this response in the Postman:
+{
+"apiPath": "uri=/api/contact-info",
+"errorCode": "INTERNAL_SERVER_ERROR",
+"errorMessage": "Loans contact-info API FAKE error",
+"errorTime": "2025-06-24T18:54:59.7779627"
+}
