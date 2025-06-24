@@ -68,3 +68,17 @@ http://localhost:8080/actuator/circuitbreakerevents
 
 ### Beware of caching GET requests.
 Do clean your Postman cache.
+
+
+## Setting timeout globally
+
+### This will cause response after timeout similar to this:
+{
+    "timestamp": "2025-06-24T15:07:48.466+00:00",
+    "path": "/eazybank/loans/api/contact-info",
+    **"status": 504,**
+    **"error": "Gateway Timeout",**
+    "requestId": "6be1e6a2-3",
+    "message": "Response took longer than timeout: PT2S",
+    "trace": "org.springframework.cloud.gateway.support.TimeoutException: Response took longer than timeout: PT2S\r\n\tSuppressed: The stacktrace has been enhanced by Reactor, refer to additional information below: \nAssembly trace from producer [reactor.core.publisher.MonoError] :\n\treactor.core.publisher.Mono.error(Mono.java:299)\n\torg.springframework.cloud.gateway.filter.NettyRoutingFilter.lambda$filter$6(NettyRoutingFilter.java:195)\r\nError has been observed at the following site(s):\r\n\t*____Mono.error ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.lambda$filter$6(NettyRoutingFilter.java:195)\r\n\t*____Mono.defer ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.filter(NettyRoutingFilter.java:194)\r\n\t*__Flux.timeout ⇢ at org.springframework.cloud.gateway.filter.NettyRoutingFilter.filter(NettyRoutingFilter.java:193)\r\nOriginal Stack Trace:\r\n"
+}
