@@ -108,7 +108,8 @@ Do clean your Postman cache.
 
 ## Retry pattern implemented on accounts service
 
-### Postman response on GET http://localhost:8072/eazybank/accounts/api/build-info
+### Postman response on 
+GET http://localhost:8072/eazybank/accounts/api/build-info
 0.9 - static value
 
 ### accounts service logs:
@@ -120,6 +121,11 @@ Do clean your Postman cache.
 ### Note: 
 Here, the initial attempt is also count as retry, which is different from the retry pattern on Gateway Server. 
 
-### Now after increasing the waitDuration we get response from circuit breaker because it's default timeout is less 
-### than waitDuration: 500.
+### Now after increasing the waitDuration we get response from circuit breaker because it's default timeout (around 1s) 
+### is less than waitDuration: 500.
 An error occurred. Please try again after come time or contact support team!!!
+
+### Now after we set default timeout for cuircuit breaker to 4s we get the response from retry fallback method:
+GET http://localhost:8072/eazybank/accounts/api/build-info
+0.9 - static value
+
