@@ -34,8 +34,8 @@ public class GatewayserverApplication {
                         .path("/eazybank/loans/**")
                         .filters(f -> f.rewritePath("/eazybank/loans/(?<segment>.*)", "/${segment}")
                                        .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-                                        .retry(retryConfig -> retryConfig.setRetries(3)
-                                                                         .setMethods(HttpMethod.GET)    // just for GET methods
+                                       .retry(retryConfig -> retryConfig.setRetries(3)
+                                                                        .setMethods(HttpMethod.GET)    // just for GET methods
                                                 .setBackoff(
                                                         Duration.ofMillis(100),     // first backoff
                                                         Duration.ofMillis(1000),    // max backoff
