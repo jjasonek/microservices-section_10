@@ -23,10 +23,12 @@ public class ResponseTraceFilter {
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {    // then() ensures, that our filter is applied after the response from the microservice is sent.
                 HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
                 String correlationId = filterUtility.getCorrelationId(requestHeaders);
-                logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
-                exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
+
+                if(!(exchange.getResponse().getHeaders().containsKey(filterUtility.CORRELATION_ID))) {
+                    logger.debug("Updated the correlation id to the outbound headers: {}", correlationId);
+                    exchange.getResponse().getHeaders().add(filterUtility.CORRELATION_ID, correlationId);
+                }
             }));
         };
     }
-
 }
