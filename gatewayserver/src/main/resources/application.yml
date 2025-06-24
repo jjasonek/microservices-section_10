@@ -44,7 +44,7 @@ logging:
 resilience4j.circuitbreaker:
   configs:
     default:   # can be replaced with our name in filters definition if we want different settings for different filters
-      sliding-window-size: 10   # monitor at least 10 calls before making a decision
+      sliding-window-size: 10   # monitor at least 10 calls before making a decision  # slidingWindowSize is also allowed
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50  # 50% failure rate
       waitDurationInOpenState: 10000  # wait 10 seconds in open state

@@ -62,4 +62,9 @@ http://localhost:8072/actuator/circuitbreakers
 http://localhost:8072/actuator/circuitbreakerevents?name=accountsCircuitBreaker
 
 
+### For testing the CircuitBreaker on a client we should watch the clients actuator endpoints:
+http://localhost:8080/actuator/circuitbreakers
+http://localhost:8080/actuator/circuitbreakerevents
 
+### Beware of caching GET requests.
+Do clean your Postman cache.
