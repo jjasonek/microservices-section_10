@@ -148,3 +148,176 @@ and log:
 2025-06-24T22:45:25.953+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
 2025-06-24T22:45:26.973+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfo() method invoked
 2025-06-24T22:45:26.976+02:00 DEBUG 26412 --- [accounts] [nio-8080-exec-1] c.e.a.controller.AccountsController      : getBuildInfoFallback() method invoked
+
+
+## RateLimiter pattern implemented on Gateway Server
+
+### run Redis server
+docker run -p 6379:6379 --name eazyredis -d redis
+
+### Load test sending requests to Gateway Server -> cards service using ApacheBench
+-n: number of requests
+-c: (concurrency) number of threads (we are sending 2 concurrent requests each time
+-v: verbose
+
+docker run --rm jjasonek/apache-benchmark:s1 -n 10 -c 2 -v 3 http://host.docker.internal:8072/eazybank/cards/api/contact-info
+
+PS C:\Training\Microservices\apache-benchmark-docker> docker run --rm jjasonek/apache-benchmark:s1 -n 10 -c 2 -v 3 http://host.docker.internal:8072/eazybank/cards/api/contact-info
+This is ApacheBench, Version 2.3 <$Revision: 1913912 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking host.docker.internal (be patient)...INFO: GET header ==
+---
+GET /eazybank/cards/api/contact-info HTTP/1.0
+Host: host.docker.internal:8072
+User-Agent: ApacheBench/2.3
+Accept: */*
+
+
+---
+LOG: header received:
+HTTP/1.1 200 OK
+transfer-encoding: chunked
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+Content-Type: application/json
+Date: Wed, 25 Jun 2025 20:06:52 GMT
+eazybank-correlation-id: 685337c7-b0aa-488d-b90d-0f5efe8ee3b1
+X-Response-Time: 2025-06-25T22:02:10.522675800
+connection: close
+
+
+LOG: Response code = 200
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+LOG: header received:
+HTTP/1.0 429 Too Many Requests
+X-RateLimit-Remaining: 0
+X-RateLimit-Requested-Tokens: 1
+X-RateLimit-Burst-Capacity: 1
+X-RateLimit-Replenish-Rate: 1
+content-length: 0
+
+
+WARNING: Response code not 2xx (429)
+..done
+
+
+Server Software:
+Server Hostname:        host.docker.internal
+Server Port:            8072
+
+Document Path:          /eazybank/cards/api/contact-info
+Document Length:        213 bytes
+
+Concurrency Level:      2
+Time taken for tests:   0.435 seconds
+Complete requests:      10
+Failed requests:        9
+(Connect: 0, Receive: 0, Length: 9, Exceptions: 0)
+Non-2xx responses:      9
+Total transferred:      2146 bytes
+HTML transferred:       213 bytes
+Requests per second:    23.01 [#/sec] (mean)
+Time per request:       86.925 [ms] (mean)
+Time per request:       43.462 [ms] (mean, across all concurrent requests)
+Transfer rate:          4.82 [Kbytes/sec] received
+
+Connection Times (ms)
+min  mean[+/-sd] median   max
+Connect:        1    1   0.3      1       2
+Processing:     5   46 122.2      8     394
+Waiting:        5   45 120.0      8     387
+Total:          6   47 122.5     10     396
+
+Percentage of the requests served within a certain time (ms)
+50%     10
+66%     10
+75%     10
+80%     10
+90%    396
+95%    396
+98%    396
+99%    396
+100%    396 (longest request)
