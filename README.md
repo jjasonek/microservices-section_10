@@ -330,7 +330,7 @@ GET http://localhost:8072/eazybank/accounts/api/java-version
 response: C:\Java\jdk-21
 
 
-### After some number of requests (manulaly) throug the postman:
+### After some number of requests (manually) throug the postman:
 GET http://localhost:8072/eazybank/accounts/api/java-version
 {
     "apiPath": "uri=/api/java-version",
@@ -338,3 +338,7 @@ GET http://localhost:8072/eazybank/accounts/api/java-version
     "errorMessage": "RateLimiter 'getJavaVersion' does not permit further calls",
     "errorTime": "2025-06-26T14:17:43.785097"
 }
+
+### When testing with the fallback method wi get this, when exceed the rate limit:
+GET http://localhost:8072/eazybank/accounts/api/java-version
+Java 21 - fallback value
