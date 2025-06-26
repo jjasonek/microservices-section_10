@@ -342,3 +342,37 @@ GET http://localhost:8072/eazybank/accounts/api/java-version
 ### When testing with the fallback method wi get this, when exceed the rate limit:
 GET http://localhost:8072/eazybank/accounts/api/java-version
 Java 21 - fallback value
+
+
+## Docker Compose
+
+### for all microservices we call following to generate docker images:
+mvn compile jib:dockerBuild
+
+docker image ls --filter=reference="jjasonek/*:s10"
+REPOSITORY               TAG       IMAGE ID       CREATED        SIZE
+jjasonek/gatewayserver   s10       8d761143f4af   55 years ago   345MB
+jjasonek/loans           s10       57bdb8d2f3d9   55 years ago   374MB
+jjasonek/cards           s10       af786fbc14c8   55 years ago   374MB
+jjasonek/accounts        s10       38ff0820cd84   55 years ago   376MB
+jjasonek/configserver    s10       755f84749b36   55 years ago   331MB
+jjasonek/eurekaserver    s10       f59a03a7eb30   55 years ago   344MB
+
+Alternatively you can use (on Linux):
+docker images | grep s10
+
+### push images to docker hub:
+docker image push docker.io/jjasonek/accounts:s10
+docker image push docker.io/jjasonek/loans:s10
+docker image push docker.io/jjasonek/cards:s10
+docker image push docker.io/jjasonek/configserver:s10
+docker image push docker.io/jjasonek/eurekaserver:s10
+docker image push docker.io/jjasonek/gatewayserver:s10
+
+### run docker compose
+docker compose up -d
+docker compose down
+
+### testing
+GET http://localhost:8072/eazybank/accounts/api/java-version
+docker run --rm jjasonek/apache-benchmark:s1 -n 10 -c 2 -v 3 http://host.docker.internal:8072/eazybank/cards/api/contact-info
