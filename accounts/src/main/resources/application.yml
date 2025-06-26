@@ -91,3 +91,10 @@ resilience4j.retry:
         - java.lang.NullPointerException  # do not retry on NullPointerException
       retryExceptions:
         - java.util.concurrent.TimeoutException    # retry only when TimeoutException is thrown. This makes ignoreExceptions not used.
+
+resilience4j.ratelimiter:
+  configs:
+    default:    # for alli rate limiters in the service
+      timeoutDuration: 1000   # 1 second. Maximum time for thread to wait for a new quota.
+      limitRefreshPeriod: 5000    # renew the quota every 5 seconds
+      limitForPeriod: 1     # the quota

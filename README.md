@@ -321,3 +321,20 @@ Percentage of the requests served within a certain time (ms)
 98%    396
 99%    396
 100%    396 (longest request)
+
+
+## Rate Limiter in accounts microservice
+
+### Normal response
+GET http://localhost:8072/eazybank/accounts/api/java-version
+response: C:\Java\jdk-21
+
+
+### After some number of requests (manulaly) throug the postman:
+GET http://localhost:8072/eazybank/accounts/api/java-version
+{
+    "apiPath": "uri=/api/java-version",
+    "errorCode": "INTERNAL_SERVER_ERROR",
+    "errorMessage": "RateLimiter 'getJavaVersion' does not permit further calls",
+    "errorTime": "2025-06-26T14:17:43.785097"
+}
